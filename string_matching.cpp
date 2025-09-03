@@ -76,21 +76,16 @@ int rabinKarpSearch(const string &text, const string &pattern) {
 // Time: O(n + m), Space: O(m)
 vector<int> buildLPS(const string &pat) {
     int m = (int)pat.size();
-    vector<int> lps(m, 0);
-    int len = 0; // length of previous longest prefix suffix
-    int i = 1;
-    while (i < m) {
-        if (pat[i] == pat[len]) {
-            ++len;
-            lps[i] = len;
-            ++i;
-        } else {
-            if (len != 0) {
-                len = lps[len - 1]; // try shorter prefix
-            } else {
-                lps[i] = 0;
-                ++i;
-            }
+    vector<int> lps(m);
+    for(int i = 1, k = 0; i < m; ++i){
+        while(k > 0 && pat[k] != pat[i]){
+            k = lps[k - 1];
+        }
+        if(pat[i] == pat[k]){
+            lps[i] = ++k;
+        }
+        else{
+            lps[i] = k;
         }
     }
     return lps;
